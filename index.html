@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Floral de Argentina</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 90vh; /* Altura del mapa */
+            width: 100%; /* Ancho completo */
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mapa Floral del Noroeste de Argentina</h1>
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // Crear un mapa centrado en el noroeste de Argentina
+        var map = L.map('map').setView([-24.5, -65.5], 6);
+
+        // Capa de mapas
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // GeoJSON para las áreas de floración
+        var floralAreas = [
+            {
+                "type": "Feature",
+                "properties": { "name": "Algarrobo", "color": "#ffcc00" },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-65.0, -24.5],
+                        [-65.5, -24.5],
+                        [-65.5, -24.0],
+                        [-65.0, -24.0],
+                        [-65.0, -24.5]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": { "name": "Eucalipto", "color": "#00cc00" },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-66.0, -25.0],
+                        [-66.5, -25.0],
+                        [-66.5, -24.5],
+                        [-66.0, -24.5],
+                        [-66.0, -25.0]
+                    ]]
+                }
+            },
+            {
+                "type": "Feature",
+                "properties": { "name": "Limonero", "color": "#ff6600" },
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [[
+                        [-64.5, -24.0],
+                        [-65.0, -24.0],
+                        [-65.0, -23.5],
+                        [-64.5, -23.5],
+                        [-64.5, -24.0]
+                    ]]
+                }
+            }
+        ];
+
+        // Agregar las áreas al mapa
+        floralAreas.forEach(function(area) {
+            var polygon = L.geoJSON(area, {
+                style: function(feature) {
+                    return { color: feature.properties.color };
+                }
+            }).addTo(map);
+            polygon.bindPopup(area.properties.name);
+        });
+    </script>
+</body>
+</html>
